@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import * as Vuex from 'vuex';
 import { State, Source } from '@/store/state';
-import { actions, mutations } from '@/store/sources';
+import { actions, mutations, getters} from '@/store/sources';
 Vue.use(Vuex);
 
 export type Context = Vuex.ActionContext<State, State>;
@@ -16,6 +16,9 @@ const store: Vuex.StoreOptions<State> = {
   },
   mutations: {
     ...mutations,
+  },
+  getters: {
+    ...getters,
   },
 };
 export default new Vuex.Store(store);

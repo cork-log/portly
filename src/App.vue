@@ -3,15 +3,19 @@
     <md-app-drawer md-persistent="mini" :md-active.sync="menuVisible">
       <md-list>
         <md-list-item>
-          <router-link to="/"><md-icon>home</md-icon></router-link>
+          <router-link to="/">
+            <md-icon>home</md-icon>
+          </router-link>
           <span class="md-list-item-text">
             <router-link to="/">Home</router-link>
           </span>
         </md-list-item>
         <md-list-item>
-          <router-link to="/source/new"><md-icon>info</md-icon></router-link>
+          <router-link to="/sources">
+            <md-icon>view_list</md-icon>
+          </router-link>
           <span class="md-list-item-text">
-            <router-link to="/source/new">Source</router-link>
+            <router-link to="/sources">Sources</router-link>
           </span>
         </md-list-item>
       </md-list>
@@ -20,7 +24,7 @@
       <md-button class="md-icon-button" @click="menuVisible = !menuVisible">
         <md-icon>menu</md-icon>
       </md-button>
-      <span class="md-title">My Title</span>
+      <span class="md-title">{{Title}}</span>
     </md-app-toolbar>
     <md-app-content>
       <router-view/>
@@ -35,19 +39,22 @@
   "default",
   (
     primary: md-get-palette-color(indigo, 500),
-    accent: md-get-palette-color(green, A200)
+    accent: md-get-palette-color(indigo, A100)
   )
 );
 @import "~vue-material/dist/theme/all"; // Apply the theme
-.full-height{
+.full-height {
   height: 100vh;
 }
-
 </style>
-<script>
-export default {
-  data: () => ({
-    menuVisible: false,
-  }),
-};
+<script lang="ts">
+import Vue from "vue";
+import { Prop, Component, Watch } from "vue-property-decorator";
+@Component
+export default class App extends Vue {
+  menuVisible = false;
+  public get Title(): string {
+    return this.$router.currentRoute.name || "Page";
+  }
+}
 </script>

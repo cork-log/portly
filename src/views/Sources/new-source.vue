@@ -27,16 +27,19 @@ import { Action } from "vuex-class";
 import Vue from "vue";
 @Component
 export default class NewSource extends Vue {
-  @Action("createSource") createSource: any;
+  @Action private createSource: any;
 
   public name = "";
   public sending = false;
 
-  submit() {
+  async submit() {
     if (this.name === "") {
       return;
     }
-    this.createSource({ name: this.name });
+    this.sending = true;
+    const result = await this.createSource({ name: this.name });
+    this.sending = false;
+    this.$router.push(`/sources/${result.id}`);
   }
 }
 </script>
