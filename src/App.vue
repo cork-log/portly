@@ -24,7 +24,7 @@
       <md-button class="md-icon-button" @click="menuVisible = !menuVisible">
         <md-icon>menu</md-icon>
       </md-button>
-      <span class="md-title">{{Title}}</span>
+      <span class="md-title">{{this.$route.name}}</span>
     </md-app-toolbar>
     <md-app-content>
       <router-view/>
@@ -49,12 +49,10 @@
 </style>
 <script lang="ts">
 import Vue from "vue";
+import { Route } from "vue-router";
 import { Prop, Component, Watch } from "vue-property-decorator";
 @Component
 export default class App extends Vue {
   menuVisible = false;
-  public get Title(): string {
-    return this.$router.currentRoute.name || "Page";
-  }
 }
 </script>

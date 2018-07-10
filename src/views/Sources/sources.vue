@@ -21,7 +21,6 @@ export default class Sources extends Vue {
 
   mounted() {
     this.fetchSources();
-
   }
 }
 </script>

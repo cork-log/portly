@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Home from './views/Home.vue';
-import About from './views/About.vue';
 import NewSource from './views/Sources/new-source.vue';
 import Source from './views/Sources/source.vue';
 import Sources from './views/Sources/sources.vue';
@@ -17,7 +16,7 @@ export default new Router({
     },
     {
       path: '/sources',
-      name: 'Source',
+      name: 'Sources',
       component: Sources,
     },
     {
@@ -27,7 +26,7 @@ export default new Router({
     },
     {
       path: '/sources/:id',
-      name: 'Sources',
+      name: 'Source',
       component: Source,
       props: true,
     },
