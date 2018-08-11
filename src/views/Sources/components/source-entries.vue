@@ -1,7 +1,7 @@
 <template>
   <div>
     <Tabs :id="sourceId"></Tabs>
-    <h2>{{source.name}}</h2>
+    <h2>{{name}}</h2>
     <!-- The table component in vue-material does not work with computed fields -->
     <Table :entries="entries"></Table>
   </div>
@@ -21,26 +21,13 @@ export default class SourceEntries extends Vue {
   @Getter private getSource!: any;
   @Getter private getEntries!: any;
 
-  private entries: any = [];
-
-  private get entriesP(): Entry[] {
+  private get entries(): Entry[] {
     const entries = this.getEntries(this.sourceId);
-    this.entries = entries || [];
-    this.$forceUpdate();
     return entries || [];
   }
-  private entriesF(): Entry[] {
-    const entries = this.getEntries(this.sourceId);
-    this.entries = entries || [];
-    this.$forceUpdate();
-    return entries || [];
-  }
-  public get source(): Source {
+  public get name(): Source {
     const src = this.getSource(this.sourceId);
-    this.$set(this, "entries", src.entries);
-    // this.entries = [...this.entries, ...src.entries];
-    this.$forceUpdate();
-    return src;
+    return src ? src.name : "";
   }
 
   mounted() {
@@ -48,6 +35,3 @@ export default class SourceEntries extends Vue {
   }
 }
 </script>
-
-<style>
-</style>

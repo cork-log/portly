@@ -17,6 +17,10 @@ const actions: Vuex.ActionTree<State, State> = {
     context.commit('UPDATE_SOURCES', resp.data);
   },
   async fetchEntries(context: Context, sourceId: string) {
+    // Not a big fan of this, maybe create an initStoreMethod
+    if (!context.state.sources[sourceId]) {
+      await context.dispatch("fetchSources");
+    }
     const resp = await axios.get(`${url}/api/source/${sourceId}/entry?direction=1`);
     context.commit('UPDATE_ENTRIES', { entries: resp.data.data, sourceId });
   },
@@ -62,14 +66,9 @@ const mutations: Vuex.MutationTree<State> = {
     });
   },
   UPDATE_ENTRIES(state, { entries, sourceId }: { entries: Entry[], sourceId: string }) {
-    // const newEntries = entries.filter((x) => !state.sources[sourceId].entries.some((k) => k.id === x.id));
-    // newEntries.map((x) => Object.assign({}, x))
-    // Vue.set(state.sources[sourceId], 'entries', [...state.sources[sourceId].entries, ...newEntries]);
     Vue.set(state.sources, sourceId, Object.assign(state.sources[sourceId] || {},
       { entries: [...entries] },
-      // { entries: [...state.sources[sourceId].entries, ...newEntries] },
     ));
-    // state.sources[sourceId].entries = [...state.sources[sourceId].entries, ...newEntries];
   },
 };
 const getters: Vuex.GetterTree<State, State> = {

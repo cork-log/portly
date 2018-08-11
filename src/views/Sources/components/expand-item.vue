@@ -28,10 +28,6 @@ export default class ExpandItem extends Vue {
   private get icon(){
     return this.expand ? "expand_less" : "expand_more";
   }
-
-  private mounted() {
-    debugger;
-  }
 }
 </script>
 

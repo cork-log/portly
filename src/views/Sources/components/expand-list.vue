@@ -10,16 +10,8 @@
 <script lang="ts">
 import Vue from "vue";
 import { Prop, Component } from "vue-property-decorator";
-@Component({})
+@Component
 export default class ExpandList extends Vue {
   @Prop() items!: any[];
-
-  private mounted() {
-    debugger;
-  }
 }
 </script>
-
-
-<style>
-</style>
