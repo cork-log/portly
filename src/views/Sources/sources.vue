@@ -4,7 +4,7 @@
       <md-icon>add</md-icon>
     </md-button>
     <md-list v-for="source in sources">
-      <md-list-item :to="`sources/${source.id}`">{{source.name}}</md-list-item>
+      <md-list-item :to="`sources/${source.id}/entries`">{{source.name}}</md-list-item>
     </md-list>
   </md-content>
 </template>
