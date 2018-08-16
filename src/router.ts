@@ -1,20 +1,20 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Home from './views/Home.vue';
 import NewSource from './views/Sources/new-source.vue';
-// import Source from './views/Sources/source.vue';
-import SourceEntries from './views/Sources/components/source-entries.vue';
-import SourceKeys from './views/Sources/components/source-keys.vue';
+import NewSourceJob from './views/Sources/new-source-job.vue';
+import SourceEntries from './views/Sources/source-entries.vue';
+import SourceKeys from './views/Sources/source-keys.vue';
+import SourceJobs from './views/Sources/source-jobs.vue';
 import Sources from './views/Sources/sources.vue';
 
 Vue.use(Router);
 
 export default new Router({
+  mode: "history",
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: Home,
+      redirect: '/sources',
     },
     {
       path: '/sources',
@@ -30,6 +30,18 @@ export default new Router({
       path: '/sources/:sourceId/entries',
       name: 'Source Entries',
       component: SourceEntries,
+      props: true,
+    },
+    {
+      path: '/sources/:sourceId/jobs',
+      name: 'Jobs Reports',
+      component: SourceJobs,
+      props: true,
+    },
+    {
+      path: '/sources/:sourceId/jobs/new',
+      name: 'New Job Report',
+      component: NewSourceJob,
       props: true,
     },
     {

@@ -26,7 +26,7 @@
       </md-button>
       <span class="md-title">{{this.$route.name}}</span>
     </md-app-toolbar>
-    <md-app-content>
+    <md-app-content style="overflow: hidden;">
       <router-view/>
     </md-app-content>
   </md-app>

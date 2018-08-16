@@ -3,6 +3,8 @@
     <md-tabs md-sync-route>
       <md-tab id="entries" :to="`/sources/${id}/entries`" md-label="Entries">
       </md-tab>
+      <md-tab id="jobs" :to="`/sources/${id}/jobs`" md-label="Jobs">
+      </md-tab>
       <md-tab id="keys" :to="`/sources/${id}/keys`" md-label="Keys">
       </md-tab>
     </md-tabs>

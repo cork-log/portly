@@ -39,7 +39,7 @@ export default class NewSource extends Vue {
     this.sending = true;
     const result = await this.createSource({ name: this.name });
     this.sending = false;
-    this.$router.push(`/sources/${result.id}`);
+    this.$router.push(`/sources/${result.id}/entries`);
   }
 }
 </script>
