@@ -18,7 +18,17 @@ export interface Source {
   name: string;
   entries: Entry[];
   contexts: AuthContext[];
+  jobs: Job[];
 }
+export interface Job {
+  id: string;
+  source_id: string;
+  name: string;
+  tolerance: number;
+  frequency: Frequency;
+  expected_at: string;
+}
+export type Frequency = 'H' | 'D' | 'W' | 'M';
 
 export interface State {
   sources: { [key: string]: Source };

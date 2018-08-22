@@ -38,7 +38,7 @@
 @include md-register-theme(
   "default",
   (
-    primary: md-get-palette-color(indigo, 500),
+    primary: md-get-palette-color(bluegrey, 500),
     accent: md-get-palette-color(indigo, A100)
   )
 );
@@ -50,7 +50,7 @@
 <script lang="ts">
 import Vue from "vue";
 import { Route } from "vue-router";
-import { Prop, Component, Watch } from "vue-property-decorator";
+import { Component } from "vue-property-decorator";
 @Component
 export default class App extends Vue {
   menuVisible = false;

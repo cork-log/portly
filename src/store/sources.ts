@@ -1,5 +1,5 @@
 import * as Vuex from 'vuex';
-import { State, Source, AuthContext, Entry } from '@/store/state';
+import { State, Source, AuthContext, Entry, Frequency, Job } from '@/store/state';
 import { Context } from '@/store/store';
 import axios from 'axios';
 import Vue from 'vue';
@@ -38,12 +38,21 @@ const actions: Vuex.ActionTree<State, State> = {
     const resp = await axios.get(`${url}/api/source/${req.sourceId}/auth/${req.contextId}/token`);
     return resp.data.token;
   },
+  async createJob(context: Context, req: { name: string, tolerance: number, frequency: Frequency, sourceId: string }) {
+    const resp = await axios.post(`${url}/api/source/${req.sourceId}/jobs`, req);
+    context.commit('ADD_JOB', resp.data);
+    return resp.data;
+  },
+  async fetchJobDescriptors(context: Context, sourceId: string) {
+    const resp = await axios.get(`${url}/api/source/${sourceId}/jobs`);
+    context.commit('UPDATE_JOB_DESCRIPTORS', resp);
+  },
 };
 const mutations: Vuex.MutationTree<State> = {
   ADD_SOURCE(state, { id, name }) {
     if (!state.sources[id]) {
       Vue.set(state.sources, id, {
-        name, id, entries: [], contexts: [],
+        name, id, entries: [], contexts: [], jobs: [],
       });
     }
   },
@@ -55,20 +64,37 @@ const mutations: Vuex.MutationTree<State> = {
     Vue.set(state.sources, authContext.source_id, {
       id: old.id,
       name: old.name,
-      entries: [...old.entries],
+      entries: old.entries,
       contexts: [...old.contexts, authContext],
+      jobs: old.jobs,
     });
   },
   UPDATE_SOURCES(state, sources: Source[]) {
     const newSources = sources.filter((x) => !state.sources[x.id]);
     newSources.forEach((source) => {
-      Vue.set(state.sources, source.id, { id: source.id, name: source.name, entries: [], contexts: source.contexts });
+      Vue.set(state.sources, source.id, {
+        id: source.id,
+        name: source.name,
+        entries: source.entries || [],
+        contexts: source.contexts || [],
+        jobs: source.jobs || [],
+      });
     });
   },
   UPDATE_ENTRIES(state, { entries, sourceId }: { entries: Entry[], sourceId: string }) {
     Vue.set(state.sources, sourceId, Object.assign(state.sources[sourceId] || {},
       { entries: [...entries] },
     ));
+  },
+  ADD_JOB(state, job: Job) {
+    const old = state.sources[job.source_id];
+    Vue.set(state.sources, job.source_id, {
+      id: old.id,
+      name: old.name,
+      entries: old.entries,
+      contexts: old.contexts,
+      jobs: [...old.jobs, job],
+    });
   },
 };
 const getters: Vuex.GetterTree<State, State> = {
@@ -80,6 +106,11 @@ const getters: Vuex.GetterTree<State, State> = {
   getEntries(state) {
     return (id: string) => {
       return state.sources[id] ? state.sources[id].entries : [];
+    };
+  },
+  getJobs(state) {
+    return (id: string) => {
+      return state.sources[id] ? state.sources[id].jobs : [];
     };
   },
 };
