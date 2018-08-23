@@ -1,10 +1,6 @@
 <template>
   <div class="md-layout row">
-    <md-dialog-confirm :md-active.sync="confirm"
-      :md-title="`${dialogDirection} Key?`"
-      :md-content="`Are you sure you want to <strong>${dialogDirection}</strong> this key? <br> A disabled key cannot be used to store new entries.`"
-      md-confirm-text="Okay" md-cancel-text="Nope"
-      @md-cancel="onCancel" @md-confirm="onConfirm" />
+    <md-dialog-confirm :md-active.sync="confirm" :md-title="`${dialogDirection} Key?`" :md-content="`Are you sure you want to <strong>${dialogDirection}</strong> this key? <br> A disabled key cannot be used to store new entries.`" md-confirm-text="Okay" md-cancel-text="Nope" @md-cancel="onCancel" @md-confirm="onConfirm" />
     <Tabs :id="sourceId"></Tabs>
     <md-button @click="showNewContextDialog = true" class="md-fab-top-right md-fab md-accent">
       <md-icon>add</md-icon>
@@ -37,15 +33,20 @@ export default class SourceKeys extends Vue {
   @Action private createAuthContext!: any;
   @Action private requestToken!: any;
   @Action private toggleAuthContext!: any;
-  @Getter private getSource!: any;
+  @Action private fetchContexts!: any;
+  @Getter private getContexts!: any;
   private showNewContextDialog = false;
   private showTokenDialog = false;
   private token = "";
   private confirm = false;
-  private pendingContext! : AuthContext | null;
+  private pendingContext!: AuthContext | null;
+
+  mounted(){
+    this.fetchContexts(this.sourceId);
+  }
 
   private onConfirm() {
-    if(this.pendingContext){
+    if (this.pendingContext) {
       this.toggleAuthContext({
         sourceId: this.sourceId,
         contextId: this.pendingContext.id
@@ -54,7 +55,7 @@ export default class SourceKeys extends Vue {
     }
   }
   private onCancel() {
-    this.pendingContext!.enabled = !this.pendingContext!.enabled
+    this.pendingContext!.enabled = !this.pendingContext!.enabled;
     this.pendingContext = null;
   }
   toggle(context: AuthContext) {
@@ -62,21 +63,21 @@ export default class SourceKeys extends Vue {
     this.pendingContext = context;
     this.confirm = true;
   }
-  
-  private get dialogDirection() : string {
+
+  private get dialogDirection(): string {
     // This is backwards becuase the switch toggles the value early
-    if(this.pendingContext && this.pendingContext.enabled){
+    if (this.pendingContext && this.pendingContext.enabled) {
       return "Enable";
-    }else{
+    } else {
       return "Disable";
     }
   }
-  
+
   public get contexts(): AuthContext[] {
-    const source: Source = this.getSource(this.sourceId);
-    return source ? source.contexts : [];
+    const contexts: AuthContext[] = this.getContexts(this.sourceId);
+    return contexts;
   }
-  async getToken(context: AuthContext, event : Event) {
+  async getToken(context: AuthContext, event: Event) {
     const token = await this.requestToken({
       sourceId: this.sourceId,
       contextId: context.id
