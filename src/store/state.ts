@@ -16,20 +16,20 @@ export interface AuthContext {
 export interface Source {
   id: string;
   name: string;
-  entries: Entry[];
-  contexts: AuthContext[];
-  jobs: Job[];
 }
-export interface Job {
+export interface JobDescriptor {
   id: string;
   source_id: string;
   name: string;
   tolerance: number;
-  frequency: Frequency;
+  frequency: number;
   expected_at: string;
 }
-export type Frequency = 'H' | 'D' | 'W' | 'M';
 
+export interface Map<T> { [id: string]: T; }
 export interface State {
-  sources: { [key: string]: Source };
+  jobs: Map<Map<JobDescriptor>>;
+  sources: Map<Source>;
+  entries: Map<Map<Entry>>;
+  contexts: Map<Map<AuthContext>>;
 }
