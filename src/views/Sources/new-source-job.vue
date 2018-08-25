@@ -21,7 +21,7 @@
     </div>
     <md-dialog-actions class="md-layout-item md-size-100">
       <md-button class="md-accent" @click="$emit('done')">Cancel</md-button>
-      <md-button class="md-primary" @click="submitJob">Create</md-button>
+      <md-button class="md-primary" @click="submitJob">{{ isUpdate ? "Update" : "Create"}}</md-button>
     </md-dialog-actions>
   </div>
 </template>
@@ -35,17 +35,25 @@ import ToleranceConfig from "@/views/Sources/components/tolerance-config.vue";
 @Component({ components: { ConfigureTolerance: ToleranceConfig } })
 export default class NewSourceJob extends Vue {
   @Action private createJob!: any;
+  @Action private modifyJobDescriptor!: any;
   @Prop() public value!: JobDescriptor;
 
-  submitJob(){
-    // Check if this is an update or a new
-    if(this.value.id){
-      //Update
-    }else{
-      this.createJob(this.value);
-      this.$emit('done');
-    }
 
+  
+  public get isUpdate() : boolean {
+    return !!this.value.id;
+  }
+  
+
+  submitJob() {
+    // Check if this is an update or a new
+    if (this.isUpdate) {
+      this.modifyJobDescriptor(this.value);
+      this.$emit("done");
+    } else {
+      this.createJob(this.value);
+      this.$emit("done");
+    }
   }
 }
 </script>

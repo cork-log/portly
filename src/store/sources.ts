@@ -5,6 +5,7 @@ import axios from 'axios';
 import Vue from 'vue';
 
 const url = 'http://localhost:4000';
+// const url = 'http://192.168.0.18:4000';
 
 const actions: Vuex.ActionTree<State, State> = {
   async createSource(context: Context, req) {
@@ -51,6 +52,11 @@ const actions: Vuex.ActionTree<State, State> = {
     const resp = await axios.get(`${url}/api/source/${sourceId}/job`);
     context.commit('UPDATE_JOB_DESCRIPTORS', {sourceId, jobDescriptors: resp.data});
   },
+  async modifyJobDescriptor(context, req: JobDescriptor) {
+    const resp = await axios.put(`${url}/api/source/${req.source_id}/job/${req.id}`, req);
+    context.commit('UPDATE_JOB_DESCRIPTOR', resp);
+  },
+
 };
 const mutations: Vuex.MutationTree<State> = {
   ADD_SOURCE(state, { id, name }) {
@@ -92,6 +98,9 @@ const mutations: Vuex.MutationTree<State> = {
     jobDescriptors.forEach((job) => {
       Vue.set(state.jobs[sourceId], job.id, job);
     });
+  },
+  UPDATE_JOB_DESCRIPTOR(state, job: JobDescriptor) {
+    Vue.set(state.jobs[job.source_id], job.id, job);
   },
 };
 const getters: Vuex.GetterTree<State, State> = {
